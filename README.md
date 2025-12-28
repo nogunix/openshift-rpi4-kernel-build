@@ -16,7 +16,7 @@ Artifacts and ccache are persisted in PVCs for reuse across runs.
 - Default kernel: Raspberry Pi kernel (`KERNEL_REPO` + `KERNEL_REF=rpi-6.6.y`)
 
 ## Why OpenShift
-- Reproducible build environment with pinned dependencies.
+- Reproducible build environment with a containerized toolchain.
 - Explicit resource requests/limits for predictable execution.
 - Persistent volumes for artifacts and cache.
 
@@ -44,11 +44,12 @@ Artifacts and ccache are persisted in PVCs for reuse across runs.
 ## How to Run
 Example workflow. Adjust names and registry as needed.
 
-1) Build and push the image
+1) Build and push the image (OpenShift internal registry)
 ```bash
-podman build -f container/Containerfile -t openshift-rpi4-kernel-build:latest .
-# Push to your registry or the OpenShift internal registry
+podman build -f container/Containerfile -t image-registry.openshift-image-registry.svc:5000/pi4-kernel-build/openshift-rpi4-kernel-build:latest .
+podman push image-registry.openshift-image-registry.svc:5000/pi4-kernel-build/openshift-rpi4-kernel-build:latest
 ```
+Then update the Job image if you use a different registry/tag.
 
 2) Create namespace and PVCs
 ```bash
