@@ -40,17 +40,11 @@ spec:
             - name: CCACHE_DIR
               value: /work/ccache
             - name: KERNEL_REPO
-              value: https://github.com/raspberrypi/linux.git
-            # Alternate (mainline):
-            # - name: KERNEL_REPO
-            #   value: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+              value: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
             - name: KERNEL_REF
-              value: rpi-6.6.y
-            # Alternate (mainline):
-            # - name: KERNEL_REF
-            #   value: master
+              value: master
             - name: DEFCONFIG
-              value: bcm2711_defconfig
+              value: defconfig
             - name: JOBS
               value: "2"
 
