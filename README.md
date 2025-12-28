@@ -19,6 +19,8 @@ Artifacts and ccache are persisted in PVCs for reuse across runs.
 - Reproducible build environment with a containerized toolchain.
 - Explicit resource requests/limits for predictable execution.
 - Persistent volumes for artifacts and cache.
+- Works as a personal lab to learn OpenShift without running a web app or service.
+- The same build can run on any cluster node with consistent inputs and outputs.
 
 ## Design
 - `container/Containerfile` installs the cross toolchain and build deps.
@@ -62,6 +64,10 @@ oc apply -f manifests/pvc-out.yaml
 3) Run the Job
 ```bash
 oc apply -f manifests/job-build.yaml
+```
+Check logs while the Job is running:
+```bash
+oc logs -f job/rpi4-kernel-build -n pi4-kernel-build
 ```
 
 ## Rebuild / Rerun the Job
