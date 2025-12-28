@@ -1,0 +1,77 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rpi4-kernel-build
+  namespace: pi4-kernel-build
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+
+      containers:
+        - name: build
+          image: image-registry.openshift-image-registry.svc:5000/pi4-kernel-build/openshift-rpi4-kernel-build:latest
+          imagePullPolicy: Always
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+
+          command: ["bash", "-lc"]
+          args:
+            - |
+              set -euo pipefail
+              /repo/scripts/build.sh
+
+          env:
+            - name: WORKDIR
+              value: /work
+            - name: SRC_DIR
+              value: /work/src/linux
+            - name: OUT_DIR
+              value: /work/out
+            - name: CCACHE_DIR
+              value: /work/ccache
+            - name: KERNEL_REPO
+              value: https://github.com/raspberrypi/linux.git
+            # Alternate (mainline):
+            # - name: KERNEL_REPO
+            #   value: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+            - name: KERNEL_REF
+              value: rpi-6.6.y
+            # Alternate (mainline):
+            # - name: KERNEL_REF
+            #   value: master
+            - name: DEFCONFIG
+              value: bcm2711_defconfig
+            - name: JOBS
+              value: "2"
+
+          volumeMounts:
+            - name: ccache
+              mountPath: /work/ccache
+            - name: out
+              mountPath: /work/out
+
+          resources:
+            requests:
+              cpu: "2"
+              memory: "4Gi"
+            limits:
+              cpu: "4"
+              memory: "10Gi"
+
+      volumes:
+        - name: ccache
+          persistentVolumeClaim:
+            claimName: ccache-pvc
+        - name: out
+          persistentVolumeClaim:
+            claimName: out-pvc

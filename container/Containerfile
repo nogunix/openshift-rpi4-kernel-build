@@ -1,0 +1,32 @@
+# container/Containerfile
+FROM fedora:41
+
+# Install cross toolchain & kernel build deps
+RUN dnf -y update && \
+    dnf -y install \
+      git make \
+      gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu \
+      bc bison flex \
+      openssl-devel openssl-devel-engine elfutils-libelf-devel \
+      python3 perl \
+      ccache findutils file tar xz gzip \
+    && if [ ! -e /usr/include/openssl/engine.h ] && [ -f /usr/include/openssl11/openssl/engine.h ]; then \
+         ln -s /usr/include/openssl11/openssl/engine.h /usr/include/openssl/engine.h; \
+       fi \
+    && dnf clean all
+
+# Create non-root user (OpenShift runs with random UID; keep it compatible)
+# We'll avoid relying on fixed UID/GID and ensure writable work dirs.
+RUN mkdir -p /work/src /work/out /work/ccache && \
+    chmod -R 0777 /work
+
+WORKDIR /work
+ENV ARCH=arm64
+ENV CROSS_COMPILE=aarch64-linux-gnu-
+ENV CCACHE_DIR=/work/ccache
+
+# Default command: just show tool versions
+CMD ["bash", "-lc", "aarch64-linux-gnu-gcc --version && ccache --version && echo OK"]
+
+COPY scripts/ /repo/scripts/
+RUN chmod +x /repo/scripts/*.sh
