@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-: "${KERNEL_REPO:=https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git}"
-: "${KERNEL_REF:=master}"   # 例: master。必要に応じて変更
-: "${DEFCONFIG:=defconfig}"
+: "${KERNEL_REPO:=https://github.com/raspberrypi/linux.git}"
+: "${KERNEL_REF:=rpi-6.6.y}"   # 例: rpi-6.6.y。必要に応じて変更
+: "${DEFCONFIG:=bcm2711_defconfig}"
 : "${JOBS:=2}"
 
 WORKDIR="${WORKDIR:-/work}"

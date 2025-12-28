@@ -5,14 +5,15 @@ Artifacts and ccache are persisted in PVCs for reuse across runs.
 
 ## Overview
 - Provides a Fedora-based build container and OpenShift Job manifests.
-- `scripts/build.sh` fetches sources, builds the kernel, and installs modules (default: Linus mainline).
+- `scripts/build.sh` fetches sources, builds the kernel, and installs modules (default: Raspberry Pi kernel).
 - Outputs go to the `out` PVC and cache to the `ccache` PVC.
+- To build mainline instead, set `KERNEL_REPO` and `KERNEL_REF` to the desired upstream.
 
 ## Target Architecture
 - arm64 (AArch64)
 - Raspberry Pi 4 / BCM2711
-- Default defconfig: `defconfig` (mainline)
-- Default kernel: Linus mainline (`KERNEL_REPO` + `KERNEL_REF=master`)
+- Default defconfig: `bcm2711_defconfig` (Raspberry Pi)
+- Default kernel: Raspberry Pi kernel (`KERNEL_REPO` + `KERNEL_REF=rpi-6.6.y`)
 
 ## Why OpenShift
 - Reproducible build environment with pinned dependencies.
@@ -26,7 +27,7 @@ Artifacts and ccache are persisted in PVCs for reuse across runs.
 
 ## Build Flow
 1. Fetch kernel sources (`KERNEL_REPO` and `KERNEL_REF`).
-2. Generate config with `make <DEFCONFIG>`. For mainline, use `defconfig`.
+2. Generate config with `make <DEFCONFIG>`. For Raspberry Pi, use `bcm2711_defconfig`.
 3. Build `Image`, `modules`, and `dtbs`.
 4. Install modules into `OUT_DIR/mods`.
 
