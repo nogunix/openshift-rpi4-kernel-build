@@ -46,8 +46,9 @@ Example workflow. Adjust names and registry as needed.
 
 1) Build and push the image (OpenShift internal registry)
 ```bash
-podman build -f container/Containerfile -t image-registry.openshift-image-registry.svc:5000/pi4-kernel-build/openshift-rpi4-kernel-build:latest .
-podman push image-registry.openshift-image-registry.svc:5000/pi4-kernel-build/openshift-rpi4-kernel-build:latest
+podman build -f container/Containerfile -t default-route-openshift-image-registry.apps-crc.testing/pi4-kernel-build/openshift-rpi4-kernel-build:latest .
+podman login -u kubeadmin -p "$(oc whoami -t)" default-route-openshift-image-registry.apps-crc.testing
+podman push default-route-openshift-image-registry.apps-crc.testing/pi4-kernel-build/openshift-rpi4-kernel-build:latest
 ```
 Then update the Job image if you use a different registry/tag.
 
