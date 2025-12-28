@@ -63,8 +63,3 @@ oc apply -f manifests/job-build.yaml
 4) Retrieve artifacts
 - The output directory is mounted at `/work/out`.
 - Mount the `out` PVC in another Pod or use `oc cp`.
-
-## Future Improvements
-- Automate switching defconfigs/patch sets.
-- Upload artifacts automatically (e.g., S3).
-- Record build metadata (git ref, toolchain version).

@@ -62,11 +62,11 @@ spec:
 
           resources:
             requests:
-              cpu: "2"
-              memory: "4Gi"
-            limits:
               cpu: "4"
-              memory: "10Gi"
+              memory: "8Gi"
+            limits:
+              cpu: "8"
+              memory: "20Gi"
 
       volumes:
         - name: ccache
