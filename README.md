@@ -78,8 +78,6 @@ Rough wall-clock estimates on the recommended host spec (8 cores / 24 GiB):
 | Copy artifacts (Step 7) | 1–2 min | 1–2 min |
 | **Total** | **~60–90 min** | **~15–25 min** |
 
-> 💡 **Demo tip**: do everything up to the end of Step 5 **before** the meeting, then live-trigger Step 6 with a warm ccache so the build completes in ~10 minutes on screen.
-
 ---
 
 ## 3. Prerequisites (host requirements)
