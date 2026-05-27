@@ -63,6 +63,23 @@ Build artifacts and `ccache` are persisted in PVCs so they can be reused across 
    │ 6) oc cp to pull artifacts ◄───────────────┘ out-pvc / ccache-pvc
 ```
 
+### How long will this take?
+
+Rough wall-clock estimates on the recommended host spec (8 cores / 24 GiB):
+
+| Phase | First run | Subsequent runs |
+|-------|-----------|-----------------|
+| Install `crc` + `crc setup` (Step 1) | 5–10 min | — (one-time) |
+| `crc start` (Step 2) | 10–20 min | 3–5 min |
+| `podman build` the build image (Step 4-1) | 5–10 min | <1 min (cached layers) |
+| `podman push` (Step 4-2) | 1–3 min | <1 min |
+| Create namespace + PVCs (Steps 3 / 5) | <1 min | — |
+| Kernel build Job (Step 6) | **30–60 min** | **5–15 min** (ccache warm) |
+| Copy artifacts (Step 7) | 1–2 min | 1–2 min |
+| **Total** | **~60–90 min** | **~15–25 min** |
+
+> 💡 **For a customer demo**: do everything up to the end of Step 5 **before** the meeting, then live-trigger Step 6 with a warm ccache so the build completes in ~10 minutes on screen.
+
 ---
 
 ## 3. Prerequisites (host requirements)
